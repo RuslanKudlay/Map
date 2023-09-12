@@ -2,7 +2,37 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<div id="map" style="width: 100%; height: 500px;"></div>
+
+<script>
+    var mymap = L.map('map').setView([48.464837, 35.048401], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+
+    var marker = L.marker([48.464837, 35.048401]).addTo(mymap);
+    marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+
+    function onMapClick(e) {
+        //alert("You clicked the map at " + e.latlng);
+        fetch("/Admin/Register")
+            .then(response => {
+                if (response.ok) {
+                    // Если запрос выполнен успешно, выполните перенаправление на другую страницу
+                    window.location.href = response.url;
+                } else {
+                    // Обработка ошибки (если нужно)
+                    console.error("Ошибка при выполнении запроса:", response.status);
+                }
+            })
+            .catch(error => {
+                // Обработка ошибки при выполнении запроса
+                console.error("Ошибка при отправке запроса:", error);
+            });
+    }
+
+    mymap.on('click', onMapClick);
+</script>
+

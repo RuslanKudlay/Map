@@ -1,0 +1,46 @@
+﻿@model LoginUserView
+
+<style>
+    .form-container {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+    }
+</style>
+
+<h1>Login</h1>
+<form asp-controller="Admin" asp-action="Login" method="post">
+    <div class="form-group">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" class="form-control" required />
+    </div>
+    <span class="error-message" asp-validation-for="Login"></span>
+
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" class="form-control" required />
+    </div>
+    <span class="error-message" asp-validation-for="Password"></span>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>

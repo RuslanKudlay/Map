@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230911120950_Initial")]
-    partial class Initial
+    [Migration("20230911194047_DeletedPropertyConfirmPasswordFromUserTable")]
+    partial class DeletedPropertyConfirmPasswordFromUserTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,10 +37,16 @@ namespace DAL.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastLoctionUpdate")
+                    b.Property<DateTime>("LastLocationUpdate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Login")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
                         .HasColumnType("text");
 
                     b.Property<string>("Position")
@@ -71,7 +77,23 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserLocations");
+                });
+
+            modelBuilder.Entity("DAL.Entities.UserLocation", b =>
+                {
+                    b.HasOne("DAL.Entities.User", null)
+                        .WithMany("UserLocations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DAL.Entities.User", b =>
+                {
+                    b.Navigation("UserLocations");
                 });
 #pragma warning restore 612, 618
         }

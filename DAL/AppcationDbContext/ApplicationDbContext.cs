@@ -17,5 +17,10 @@ namespace DAL.AppcationDbContext
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserLocation> UserLocations { get; set; }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return await base.SaveChangesAsync();
+        }
     }
 }

@@ -1,0 +1,42 @@
+﻿@model RegisterUserView
+
+@if (TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<h1>Register</h1>
+
+<form asp-controller="Admin" asp-action="Register" method="post">
+    <div>
+        <label>First Name</label>
+        <input asp-for="FirstName"/>
+        <span asp-validation-for="FirstName"></span>
+
+        <label>Last Name</label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
+
+        <label>Father Name</label>
+        <input asp-for="FatherName" />
+        <span asp-validation-for="FatherName"></span>
+
+        <label>Position</label>
+        <input asp-for="Position"/>
+        <span asp-validation-for="Position"></span>
+
+        <label>Login</label>
+        <input asp-for="Login"/>
+        <span asp-validation-for="Login"></span>
+
+        <label>Password</label>
+        <input asp-for="Password"/>
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <p>
+        <button type="submit">Register</button>
+    </p>
+</form>

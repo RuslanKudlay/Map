@@ -12,6 +12,7 @@ namespace DAL.AppcationDbContext
     {
         DbSet<User> Users { get; set; }
         DbSet<UserLocation> UserLocations { get; set; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     }
 }
