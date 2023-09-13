@@ -1,4 +1,6 @@
-﻿<div id="map" style="width: 100%; height: 500px;"></div>
+﻿@model LocationPoint
+
+<div id="map" style="width: 100%; height: 500px;"></div>
 
 <script>
     var mymap = L.map('map').setView([48.464837, 35.048401], 13);
@@ -8,12 +10,48 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mymap);
 
-    var marker = L.marker([48.464837, 35.048401]).addTo(mymap);
-    marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+    //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
     function onMapClick(e) {
-        alert("You clicked the map at " + e.latlng);
+        var data = {
+            Latitude: e.latlng.lat,
+            Longitude: e.latlng.lng
+        };
+        fetch("/Map/Index",
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.redirected) {
+                    debugger;
+                    // Если запрос был перенаправлен, то перейти на указанную страницу
+                    window.location.href = response.url;
+                } else {
+                    // Если запрос не был перенаправлен, обработать ответ как обычно
+                    return response.json();
+                }
+            })
     }
-
     mymap.on('click', onMapClick);
 </script>
+
+
+@* .then(res => res.json())
+            .then(dataResponse => { 
+                var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+                var popupContent = `
+                    <div>
+                        <p>Name: <b>${dataResponse.firstName}</b></p>
+                        <p>Last Name: <b>${dataResponse.lastName}</b></p>
+                        <p>Latitute: <b>${dataResponse.latitute}</b></p>
+                        <p>Longitude: <b>${dataResponse.longitude}</b></p>
+                        <p>Last Modified: <b>${dataResponse.lastModified}</b></P
+                    </div>
+                `;
+                marker.bindPopup(popupContent).openPopup();
+            }); *@

@@ -12,25 +12,59 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mymap);
 
-    var marker = L.marker([48.464837, 35.048401]).addTo(mymap);
-    marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-
     function onMapClick(e) {
-        //alert("You clicked the map at " + e.latlng);
-        fetch("/Admin/Register")
-            .then(response => {
-                if (response.ok) {
-                    // Если запрос выполнен успешно, выполните перенаправление на другую страницу
+        var data = {
+            Latitude: e.latlng.lat,
+            Longitude: e.latlng.lng
+        };
+        fetch("/Map/Index",
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (response.redirected) {
                     window.location.href = response.url;
                 } else {
-                    // Обработка ошибки (если нужно)
-                    console.error("Ошибка при выполнении запроса:", response.status);
+                    fetch("/Map/Points", {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        method: "GET",
+                    })
+                    .then(res => res.json())
+                        .then(data => {
+                            var allLayers = mymap._layers;
+                            for (var layerId in allLayers) {
+                                var layer = allLayers[layerId];
+                                if (layer instanceof L.Marker) {
+                                    mymap.removeLayer(layer);
+                                }
+                            }
+
+                            for (const item of data) {
+                                if (item.latitute != null && item.longitude != null) {
+                                    var marker = L.marker([item.latitute, item.longitude]).addTo(mymap);
+                                    var popupContent = `
+                                        <div>
+                                            <p>Name: <b>${item.firstName}</b></p>
+                                            <p>Last Name: <b>${item.lastName}</b></p>
+                                            <p>Latitute: <b>${item.latitute}</b></p>
+                                            <p>Longitude: <b>${item.longitude}</b></p>
+                                            <p>Last Modified: <b>${item.lastModified}</b></p>
+                                        </div>
+
+                                    `;
+                                    marker.bindPopup(popupContent);
+                                }
+                            }
+                        })
                 }
             })
-            .catch(error => {
-                // Обработка ошибки при выполнении запроса
-                console.error("Ошибка при отправке запроса:", error);
-            });
     }
 
     mymap.on('click', onMapClick);

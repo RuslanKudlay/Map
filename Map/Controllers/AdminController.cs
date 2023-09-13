@@ -2,13 +2,13 @@
 using Map.Helper;
 using Map.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Map.Controllers
 {
-    [Authorize]
     public class AdminController : Controller
     {
         private readonly IUserService _userService;
@@ -21,6 +21,7 @@ namespace Map.Controllers
             return View();
         }
 
+        
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
@@ -38,18 +39,10 @@ namespace Map.Controllers
             }
 
             var user = UserHelper.Map(registerUserView);
-            var res = await _userService.CreateUser(user);
+            var isCreated = await _userService.CreateUser(user);
 
-            if (res == true)
+            if (isCreated == true)
             {
-                var claims = new List<Claim>
-                {
-                    new Claim("Demo", "Value")
-                };
-                var claimIdentity = new ClaimsIdentity(claims, "Cookie");
-                var claimPrincipal = new ClaimsPrincipal(claimIdentity);
-
-                await HttpContext.SignInAsync("Cookie", claimPrincipal);
                 return Redirect("/Admin/Login");
             }
 
@@ -58,19 +51,33 @@ namespace Map.Controllers
 
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> LoginAsync(LoginUserView loginUserView)
         {
             var user = UserHelper.Map(loginUserView);
-            var userCheck = await _userService.CompareUserByLoginAndPassword(user); 
-            if (userCheck == true)
+            var isValidUser = await _userService.CompareUserByLoginAndPassword(user); 
+            if (isValidUser == true)
             {
-                return Redirect("/Map/Index");
+                var userId = await _userService.GetUserByLoginAndPassword(loginUserView.Login, loginUserView.Password);
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, loginUserView.Login),
+                    new Claim("userId", userId.ToString())
+                };
+                var claimIdentity = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity),
+                    new AuthenticationProperties { ExpiresUtc = DateTime.UtcNow.AddMinutes(5) });
+
+
+                return Redirect("/Home/Index");
             }
             return View(loginUserView);
             

@@ -15,17 +15,17 @@ namespace Map.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUser()
-        {
-            return Ok(await _userService.GetAllUsers());
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllUser()
+        //{
+        //    return Ok(await _userService.GetAllUsers());
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUser(User user)
-        {
-            await _userService.CreateUser(user);
-            return Ok();
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> CreateUser(User user)
+        //{
+        //    await _userService.CreateUser(user);
+        //    return Ok();
+        //}
     }
 }

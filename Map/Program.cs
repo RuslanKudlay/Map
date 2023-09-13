@@ -1,6 +1,9 @@
+using BAL.Services.UserLocationService;
 using BAL.Services.UserService;
 using DAL.AppcationDbContext;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("Default");
@@ -8,6 +11,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(cs => cs.UseNpgsql(connectio
 
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserLocationService, UserLocationService>();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -18,7 +22,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddAuthentication("Cookie").AddCookie("Cookie", config =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(config =>
 {
     config.LoginPath = "/Admin/Register";
 });
@@ -51,6 +55,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseAuthorization();
+
+
 
 app.MapControllerRoute(
     name: "default",

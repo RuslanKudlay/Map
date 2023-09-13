@@ -7,36 +7,64 @@
     </div>
 }
 
+<style>
+    .form-container {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+    }
+</style>
+
 <h1>Register</h1>
 
 <form asp-controller="Admin" asp-action="Register" method="post">
-    <div>
+    <div class="form-group">
         <label>First Name</label>
-        <input asp-for="FirstName"/>
+        <input asp-for="FirstName" class="form-control" />
         <span asp-validation-for="FirstName"></span>
 
         <label>Last Name</label>
-        <input asp-for="LastName" />
+        <input asp-for="LastName" class="form-control" />
         <span asp-validation-for="LastName"></span>
 
         <label>Father Name</label>
-        <input asp-for="FatherName" />
+        <input asp-for="FatherName" class="form-control" />
         <span asp-validation-for="FatherName"></span>
 
         <label>Position</label>
-        <input asp-for="Position"/>
+        <input asp-for="Position" class="form-control" />
         <span asp-validation-for="Position"></span>
 
         <label>Login</label>
-        <input asp-for="Login"/>
+        <input asp-for="Login" class="form-control" />
         <span asp-validation-for="Login"></span>
 
         <label>Password</label>
-        <input asp-for="Password"/>
+        <input asp-for="Password" class="form-control" />
         <span asp-validation-for="Password"></span>
     </div>
 
     <p>
-        <button type="submit">Register</button>
+        <button type="submit" class="btn btn-primary">Register</button>
     </p>
 </form>

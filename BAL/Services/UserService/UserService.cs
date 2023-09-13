@@ -1,4 +1,5 @@
-﻿using DAL.AppcationDbContext;
+﻿using BAL.Models;
+using DAL.AppcationDbContext;
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -52,9 +53,10 @@ namespace BAL.Services.UserService
             return false;
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<Guid> GetUserByLoginAndPassword(string login, string password)
         {
-            return await _dbContext.Users.ToListAsync();
+            var user = await _dbContext.Users.FirstOrDefaultAsync(us => us.Login == login && us.Password == password);
+            return user.Id;
         }
 
         private async Task<bool> CheckLoginUser(User user)

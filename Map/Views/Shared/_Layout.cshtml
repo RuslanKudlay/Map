@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
-<body>
+<body onload="loadPoints()">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -30,6 +30,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Register">Register</a>
                         </li>
                     </ul>
                 </div>
@@ -53,3 +56,37 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    function loadPoints() {
+        debugger;
+        fetch("/Map/Points", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "GET",
+        })
+            .then(res => res.json())
+            .then(data => {
+                for (const item of data) {
+                    if (item.latitute != null && item.longitude != null) {
+                        var marker = L.marker([item.latitute, item.longitude]).addTo(mymap);
+                        var popupContent = `
+                                        <div>
+                                            <p>Name: <b>${item.firstName}</b></p>
+                                            <p>Last Name: <b>${item.lastName}</b></p>
+                                            <p>Latitute: <b>${item.latitute}</b></p>
+                                            <p>Longitude: <b>${item.longitude}</b></p>
+                                            <p>Last Modified: <b>${item.lastModified}</b></p>
+                                        </div>
+                                    `;
+                    }
+                    
+                }
+            })
+    }
+
+</script>
+
+
