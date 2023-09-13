@@ -1,12 +1,6 @@
-﻿using BAL.Models;
-using DAL.AppcationDbContext;
+﻿using DAL.AppcationDbContext;
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAL.Services.UserService
 {
@@ -20,9 +14,9 @@ namespace BAL.Services.UserService
 
         public async Task<bool> CompareUserByLoginAndPassword(User user)
         {
-            var userCheck = await _dbContext.Users.AnyAsync(us => us.Login == user.Login && us.Password == user.Password);
+            var isExistUser = await _dbContext.Users.AnyAsync(us => us.Login == user.Login && us.Password == user.Password);
 
-            if (userCheck == true)
+            if (isExistUser == true)
             {
                 return true;
             }

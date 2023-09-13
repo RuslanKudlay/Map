@@ -3,7 +3,6 @@ using BAL.Services.UserService;
 using DAL.AppcationDbContext;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("Default");
@@ -17,7 +16,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Title = "Your API",
+        Title = "My API",
         Version = "v1"
     });
 });

@@ -14,13 +14,13 @@ namespace Map.Controllers
         private readonly IUserService _userService;
         public AdminController(IUserService userService)
         {
-                _userService = userService;
+            _userService = userService;
         }
+
         public IActionResult Index()
         {
             return View();
         }
-
         
         [HttpGet]
         [AllowAnonymous]
@@ -83,11 +83,9 @@ namespace Map.Controllers
             
         }
 
-       
-
         public async Task<IActionResult> LogOff()
         {
-            await HttpContext.SignOutAsync("Cookie");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return Redirect("/Home/Index");
         }

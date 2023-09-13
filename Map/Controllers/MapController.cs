@@ -2,9 +2,7 @@
 using Map.Attributes;
 using Map.Helper;
 using Map.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Map.Controllers
 {
