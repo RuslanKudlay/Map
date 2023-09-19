@@ -1,4 +1,4 @@
-﻿@{
+﻿﻿@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -17,7 +17,7 @@
             Latitude: e.latlng.lat,
             Longitude: e.latlng.lng
         };
-        fetch("/Map/Index",
+        fetch("/MapApi/create-point",
             {
                 headers: {
                     'Accept': 'application/json',
@@ -36,7 +36,7 @@
                         },
                         method: "GET",
                     })
-                    .then(res => res.json())
+                        .then(res => res.json())
                         .then(data => {
                             var allLayers = mymap._layers;
                             for (var layerId in allLayers) {
@@ -50,15 +50,15 @@
                                 if (item.latitute != null && item.longitude != null) {
                                     var marker = L.marker([item.latitute, item.longitude]).addTo(mymap);
                                     var popupContent = `
-                                        <div>
-                                            <p>Name: <b>${item.firstName}</b></p>
-                                            <p>Last Name: <b>${item.lastName}</b></p>
-                                            <p>Latitute: <b>${item.latitute}</b></p>
-                                            <p>Longitude: <b>${item.longitude}</b></p>
-                                            <p>Last Modified: <b>${item.lastModified}</b></p>
-                                        </div>
+                                            <div>
+                                                <p>Name: <b>${item.firstName}</b></p>
+                                                <p>Last Name: <b>${item.lastName}</b></p>
+                                                <p>Latitute: <b>${item.latitute}</b></p>
+                                                <p>Longitude: <b>${item.longitude}</b></p>
+                                                <p>Last Modified: <b>${item.lastModified}</b></p>
+                                            </div>
 
-                                    `;
+                                        `;
                                     marker.bindPopup(popupContent);
                                 }
                             }
@@ -69,4 +69,3 @@
 
     mymap.on('click', onMapClick);
 </script>
-

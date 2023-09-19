@@ -1,7 +1,4 @@
 ﻿using BAL.Services.UserLocationService;
-using Map.Attributes;
-using Map.Helper;
-using Map.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Map.Controllers
@@ -12,23 +9,6 @@ namespace Map.Controllers
         public MapController(IUserLocationService userLocationService)
         {
             _userLocationService = userLocationService;
-        }
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-
-        [CustomAuthorize]
-        [HttpPost]
-        public async Task<IActionResult> Index([FromBody] LocationPoint locationPoint)
-        {
-            var userId = new Guid(HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == "userId").Value);
-
-            var userLocation = UserHelper.Map(locationPoint);
-            await _userLocationService.CreatePoints(userLocation, userId);
-            return View();
         }
 
         [HttpGet]
